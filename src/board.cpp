@@ -33,6 +33,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <tuple>
+#include <string>
 
 class Board {
 public:
