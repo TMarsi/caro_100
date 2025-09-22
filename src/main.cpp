@@ -75,6 +75,10 @@ public:
         return true;
     }
     
+    const std::vector<std::vector<int>>& getGrid() const {
+        return grid;
+    }
+    
     std::tuple<int, int, int> getLastMove() const {
         return std::make_tuple(lastMoveRow, lastMoveCol, lastPlayer);
     }
@@ -426,17 +430,12 @@ public:
         std::cout << "\nTesting GameLogic..." << std::endl;
         
         Board board(15);
-        auto& grid = board;
+        // Test move validation
         
         auto result = GameLogic::validateMove({{0}}, 0, 0, 1);
         assert_test(result == GameLogic::MoveResult::VALID, "Valid move validation");
         
-        board.makeMove(7, 5, 1);
-        board.makeMove(7, 6, 1);
-        board.makeMove(7, 7, 1);
-        board.makeMove(7, 8, 1);
-        board.makeMove(7, 9, 1);
-        
+        // Create test grid for win detection
         std::vector<std::vector<int>> testGrid(15, std::vector<int>(15, 0));
         for (int i = 0; i < 5; i++) {
             testGrid[7][5 + i] = 1;
@@ -462,8 +461,7 @@ public:
         assert_test(move.row >= 0 && move.col >= 0, "AI move generation");
         assert_test(move.row < 15 && move.col < 15, "AI move bounds");
         
-        board.reset();
-        auto centerMove = ai.findBestMove(board.grid);
+        auto centerMove = ai.findBestMove(std::vector<std::vector<int>>(15, std::vector<int>(15, 0)));
         assert_test(centerMove.row == 7 && centerMove.col == 7, "AI center opening");
     }
     
@@ -534,7 +532,7 @@ public:
             displayBoard();
             
             auto [lastRow, lastCol, lastPlayer] = board.getLastMove();
-            auto state = GameLogic::checkGameState(board.grid, lastRow, lastCol);
+            auto state = GameLogic::checkGameState(board.getGrid(), lastRow, lastCol);
             
             if (state != GameLogic::GameState::PLAYING) {
                 std::cout << "Game Over: " << GameLogic::gameStateToString(state) << std::endl;
@@ -555,7 +553,7 @@ public:
                 }
             } else {
                 std::cout << "AI thinking..." << std::endl;
-                auto move = ai.findBestMove(board.grid);
+                auto move = ai.findBestMove(board.getGrid());
                 
                 if (move.row >= 0 && board.makeMove(move.row, move.col, currentPlayer)) {
                     std::cout << "AI played: " << move.row << " " << move.col << std::endl;
