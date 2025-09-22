@@ -3,6 +3,7 @@
 #ifndef GAMELOGIC_H
 #define GAMELOGIC_H
 
+#include <string>
 #include <vector>
 #include <algorithm>
 #include <array>
@@ -213,7 +214,7 @@ const std::array<std::pair<int, int>, 4> GameLogic::DIRECTIONS = {{
     {0, 1},   // Horizontal
     {1, 0},   // Vertical  
     {1, 1},   // Diagonal /
-    {1, -1}   // Diagonal \
+    {1, -1}   // Diagonal 
 }};
 
 // === IMPLEMENTATION ===
